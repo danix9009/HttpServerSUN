@@ -1,0 +1,50 @@
+group 'com.trenerg.application'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'java'
+apply plugin: 'idea'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+    compile "org.slf4j:slf4j-api:1.7.14"
+    compile "ch.qos.logback:logback-core:1.2.3"
+    compile "ch.qos.logback:logback-classic:1.2.3"
+    compile "com.fasterxml.jackson.core:jackson-databind:2.9.1"
+    compile "com.fasterxml.jackson.core:jackson-core:2.9.1"
+    compile "com.fasterxml.jackson.core:jackson-annotations:2.9.1"
+    compile "com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.9.1"
+}
+
+jar {
+    String someString = ''
+    configurations.runtime.each {someString = someString + " lib//"+it.name} //遍历项目的所有依赖的jar包赋值给变量someString
+    manifest {
+        attributes 'Main-Class': 'ServerMain'
+        attributes 'Class-Path': someString
+    }
+}
+
+task clearPj(type:Delete){
+    delete 'build','target'
+}
+
+task copyJar(type:Copy){
+    from configurations.runtime
+    into ('build/libs/lib')
+}
+//把JAR复制到目标目录
+task release(type: Copy,dependsOn: [build,copyJar]) {
+// from 'conf'
+// into ('build/libs/eachend/conf') // 目标位置
+}
+
+//为Gradle 添加UTF-8支持
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
