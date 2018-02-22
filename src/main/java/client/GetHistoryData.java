@@ -7,7 +7,7 @@ import java.net.URL;
 import java.util.List;
 import java.util.Map;
 
-public class GetMain
+public class GetHistoryData
 {
 
     private static String url = "http://210.21.223.35:9193/in-cse/360000059447606/AlarmReport";
